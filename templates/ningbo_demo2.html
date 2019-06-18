@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <!-- 开发环境版本，包含了有帮助的命令行警告--2.5.51 -->
+    <script src="${STATIC_URL}assets/vue-2.5.21/vue.development.js"></script>
+    <!-- element UI引入样式 -->
+    <link rel="stylesheet" href="${STATIC_URL}assets/element-2.4.11/index.css">
+    <!-- element UI引入组件库 -->
+    <script src="${STATIC_URL}assets/element-2.4.11/index.js"></script>
+    <!--axios.min.js--vue.js的ajax支持-->
+    <script src="${STATIC_URL}assets/vue-2.5.21/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+ 123
+</div>
+<script>
+     axios.interceptors.request.use((config) => {
+        config.headers['X-Requested-With'] = 'XMLHttpRequest';
+        let regex = /.*csrftoken=([^;.]*).*$/;                      // 用于从cookie中匹配 csrftoken值
+        config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
+        return config
+    });
+    var vm = new Vue({
+        el:'#app',
+        data:{},
+        methods:{}
+    })
+</script>
+</body>
+</html>
