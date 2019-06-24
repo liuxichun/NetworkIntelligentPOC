@@ -50,6 +50,7 @@
             <el-table-column prop="num" label="计数"></el-table-column>
         </el-table>
     </template>
+    <el-button @click="clear_data1">清空</el-button>
         <el-date-picker
       v-model="value8"
       type="datetimerange"
@@ -59,26 +60,27 @@
       value-format="yyyy-MM-dd HH:mm:ss"
     >
     </el-date-picker>
-    <el-select v-model="source_ip" placeholder="请选择源IP">
+    <el-select v-model="sel_source_ip" placeholder="请选择源IP">
         <el-option v-for="item in source_ip" :key="item.source_ip" :label="item.source_ip"
                    :value="item.source_ip"></el-option>
     </el-select>
-    <el-select v-model="source_port" placeholder="请选择源端口">
+    <el-select v-model="sel_source_port" placeholder="请选择源端口">
         <el-option v-for="item in source_port" :key="item.source_ip" :label="item.source_port"
                    :value="item.source_port"></el-option>
     </el-select>
-    <el-select v-model="destination_ip" placeholder="请选择目的IP">
+    <el-select v-model="sel_destination_ip" placeholder="请选择目的IP">
         <el-option v-for="item in destination_ip" :key="item.destination_ip" :label="item.destination_ip"
                    :value="item.destination_ip"></el-option>
     </el-select>
-    <el-select v-model="destination_port" placeholder="请选择目的端口">
+    <el-select v-model="sel_destination_port" placeholder="请选择目的端口">
         <el-option v-for="item in destination_port" :key="item.destination_port" :label="item.destination_port"
                    :value="item.destination_port"></el-option>
     </el-select>
-    <el-select v-model="tcp_flag" placeholder="请选择flag">
+    <el-select v-model="sel_tcp_flag" placeholder="请选择flag">
         <el-option v-for="item in tcp_flag" :key="item.tcp_flag" :label="item.tcp_flag"
                    :value="item.source_ip"></el-option>
     </el-select>
+    <el-button type="primary" round @click="test">搜索</el-button>
     <template>
         <el-table :data="tableData1" style="width: 100%">
             <el-table-column prop="name" label="设备名称" width="180"></el-table-column>
@@ -86,8 +88,8 @@
             <el-table-column prop="source_ip" label="源IP"></el-table-column>
             <el-table-column prop="source_port" label="源端口"></el-table-column>
             <el-table-column prop="destination_ip" label="目的IP"></el-table-column>
-            <el-table-column prop="tcp_flag" label="目的端口"></el-table-column>
-            <el-table-column prop="destination_port" label="TCP异常flag"></el-table-column>
+            <el-table-column prop="destination_port" label="目的端口"></el-table-column>
+            <el-table-column prop="tcp_flag" label="TCP异常flag"></el-table-column>
         </el-table>
     </template>
 
@@ -102,18 +104,23 @@
     var vm = new Vue({
         el: '#app',
         data: {
+            sel_source_ip:'',
             source_ip: [
                 {"source_ip": '',}
             ],
+            sel_source_port:'',
             source_port: [
                 {"source_port": '',}
             ],
+            sel_destination_ip:'',
             destination_ip: [
                 {"destination_ip": '',}
             ],
+            sel_tcp_flag:'',
             tcp_flag: [
                 {"tcp_flag": '',}
             ],
+            sel_destination_port:'',
             destination_port: [
                 {"destination_port": '',}
             ],
@@ -150,29 +157,30 @@
                 vm.sel_name = '';
                 vm.test()
             },
-            sel_radio(value){
-                switch (value) {
-                    case "1":
-                        vm.value7_read = false;
-                        vm.time_date_read = true;
-                        vm.time_date = '';
-                        break;
-                    case "2":
-                        vm.value7_read = true;
-                        vm.time_date_read = false;
-                        vm.value7 = '';
-                        break;
-                }
+            clear_data1(){
+                vm.value8 = '';
+                vm.sel_source_port = '';
+                vm.sel_destination_ip = '';
+                vm.sel_tcp_flag = '';
+                vm.sel_destination_port = '';
+                vm.test()
             },
+
             test(){
                 axios({
                     method: 'post',
                     url: '/network/test/',
                     data:{
                         date_time: vm.value7,
+                        date_time1: vm.value8,
                         sel_source_region:vm.sel_source_region,
                         sel_destination_area:vm.sel_destination_area,
                         sel_name:vm.sel_name,
+                        sel_source_ip:vm.sel_source_ip,
+                        sel_source_port:vm.sel_source_port,
+                        sel_destination_ip:vm.sel_destination_ip,
+                        sel_tcp_flag:vm.sel_tcp_flag,
+                        sel_destination_port:vm.sel_destination_port,
                     }
                 }).then((res)=>{
                     vm.tableData = res.data.res;
@@ -180,6 +188,11 @@
                     vm.source_region = res.data.source_region_List;
                     vm.destination_area = res.data.destination_area_List;
                     vm.name = res.data.name_List;
+                    vm.source_ip = res.data.source_ip_List;
+                    vm.source_port = res.data.source_port_List;
+                    vm.destination_ip = res.data.destination_ip_List;
+                    vm.tcp_flag = res.data.tcp_flag_List;
+                    vm.destination_port = res.data.destination_port_List;
                 })
             }
         }
