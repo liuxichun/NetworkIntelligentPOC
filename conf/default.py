@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'app_control',
     'account',
     'home_application',
+    'network',
 
 )
 
@@ -130,6 +131,8 @@ LANGUAGE_CODE = 'zh-CN'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
+
+
 
 # 项目路径
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))

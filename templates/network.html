@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <!-- 开发环境版本，包含了有帮助的命令行警告--2.5.51 -->
+    <script src="${STATIC_URL}assets/vue-2.5.21/vue.development.js"></script>
+    <!-- element UI引入样式 -->
+    <link rel="stylesheet" href="${STATIC_URL}assets/element-2.4.11/index.css">
+    <!-- element UI引入组件库 -->
+    <script src="${STATIC_URL}assets/element-2.4.11/index.js"></script>
+    <!--axios.min.js--vue.js的ajax支持-->
+    <script src="${STATIC_URL}assets/vue-2.5.21/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-button @click="clear_data">清空</el-button>
+    <!--<el-radio v-model="radio" label="1" @change="sel_radio">自定义</el-radio> -->
+    <el-date-picker
+      v-model="value7"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      value-format="yyyy-MM-dd HH:mm:ss"
+    >
+    </el-date-picker>
+    <!--<el-radio v-model="radio" label="2" @change="sel_radio">日期查询</el-radio>
+        <el-date-picker v-model="time_date" type="date" placeholder="选择日期" :readonly="time_date_read">
+        </el-date-picker>-->
+    <el-select v-model="sel_source_region" placeholder="请选择源区域">
+        <el-option v-for="item in source_region" :key="item.source_region" :label="item.source_region"
+                   :value="item.source_region"></el-option>
+    </el-select>
+    <el-select v-model="sel_destination_area" placeholder="请选择目的区域">
+        <el-option v-for="item in destination_area" :key="item.destination_area" :label="item.destination_area"
+                   :value="item.destination_area">
+        </el-option>
+    </el-select>
+    <el-select v-model="sel_name" placeholder="请选协议类型">
+        <el-option v-for="item in name" :key="item.name" :label="item.name" :value="item.name">
+        </el-option>
+    </el-select>
+      <el-button type="primary" round @click="test">搜索</el-button>
+    <template>
+        <el-table :data="tableData" style="width: 100%">
+            <el-table-column prop="source_region" label="源区域" width="180"></el-table-column>
+            <el-table-column prop="destination_area" label="目的区域" width="180"></el-table-column>
+            <el-table-column prop="name" label="协议类型"></el-table-column>
+            <el-table-column prop="num" label="计数"></el-table-column>
+        </el-table>
+    </template>
+        <el-date-picker
+      v-model="value8"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      value-format="yyyy-MM-dd HH:mm:ss"
+    >
+    </el-date-picker>
+    <el-select v-model="source_ip" placeholder="请选择源IP">
+        <el-option v-for="item in source_ip" :key="item.source_ip" :label="item.source_ip"
+                   :value="item.source_ip"></el-option>
+    </el-select>
+    <el-select v-model="source_port" placeholder="请选择源端口">
+        <el-option v-for="item in source_port" :key="item.source_ip" :label="item.source_port"
+                   :value="item.source_port"></el-option>
+    </el-select>
+    <el-select v-model="destination_ip" placeholder="请选择目的IP">
+        <el-option v-for="item in destination_ip" :key="item.destination_ip" :label="item.destination_ip"
+                   :value="item.destination_ip"></el-option>
+    </el-select>
+    <el-select v-model="destination_port" placeholder="请选择目的端口">
+        <el-option v-for="item in destination_port" :key="item.destination_port" :label="item.destination_port"
+                   :value="item.destination_port"></el-option>
+    </el-select>
+    <el-select v-model="tcp_flag" placeholder="请选择flag">
+        <el-option v-for="item in tcp_flag" :key="item.tcp_flag" :label="item.tcp_flag"
+                   :value="item.source_ip"></el-option>
+    </el-select>
+    <template>
+        <el-table :data="tableData1" style="width: 100%">
+            <el-table-column prop="name" label="设备名称" width="180"></el-table-column>
+            <el-table-column prop="data_time" label="时间" width="180"></el-table-column>
+            <el-table-column prop="source_ip" label="源IP"></el-table-column>
+            <el-table-column prop="source_port" label="源端口"></el-table-column>
+            <el-table-column prop="destination_ip" label="目的IP"></el-table-column>
+            <el-table-column prop="tcp_flag" label="目的端口"></el-table-column>
+            <el-table-column prop="destination_port" label="TCP异常flag"></el-table-column>
+        </el-table>
+    </template>
+
+</div>
+<script>
+     axios.interceptors.request.use((config) => {
+        config.headers['X-Requested-With'] = 'XMLHttpRequest';
+        let regex = /.*csrftoken=([^;.]*).*$/;                      // 用于从cookie中匹配 csrftoken值
+        config.headers['X-CSRFToken'] = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
+        return config
+    });
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            source_ip: [
+                {"source_ip": '',}
+            ],
+            source_port: [
+                {"source_port": '',}
+            ],
+            destination_ip: [
+                {"destination_ip": '',}
+            ],
+            tcp_flag: [
+                {"tcp_flag": '',}
+            ],
+            destination_port: [
+                {"destination_port": '',}
+            ],
+            value8:'',
+            value7_read:false,
+            time_date_read:true,
+            value7:'',
+            sel_source_region:'',
+            sel_destination_area:'',
+            sel_name:'',
+            source_region: [
+                {"source_region": '',}
+            ],
+            destination_area:[
+                {"destination_area":''}
+            ],
+            name:[
+                {"name":''}
+            ],
+            tableData: [
+                {
+                    "destination_area": '',
+                    "source_region": '',
+                    "name":''
+                }
+            ],
+            tableData1: []
+        },
+        methods:{
+            clear_data(){
+                vm.value7 = '';
+                vm.sel_source_region = '';
+                vm.sel_destination_area = '';
+                vm.sel_name = '';
+                vm.test()
+            },
+            sel_radio(value){
+                switch (value) {
+                    case "1":
+                        vm.value7_read = false;
+                        vm.time_date_read = true;
+                        vm.time_date = '';
+                        break;
+                    case "2":
+                        vm.value7_read = true;
+                        vm.time_date_read = false;
+                        vm.value7 = '';
+                        break;
+                }
+            },
+            test(){
+                axios({
+                    method: 'post',
+                    url: '/network/test/',
+                    data:{
+                        date_time: vm.value7,
+                        sel_source_region:vm.sel_source_region,
+                        sel_destination_area:vm.sel_destination_area,
+                        sel_name:vm.sel_name,
+                    }
+                }).then((res)=>{
+                    vm.tableData = res.data.res;
+                    vm.tableData1 = res.data.res1;
+                    vm.source_region = res.data.source_region_List;
+                    vm.destination_area = res.data.destination_area_List;
+                    vm.name = res.data.name_List;
+                })
+            }
+        }
+    });
+    vm.test()
+</script>
+</body>
+</html>
