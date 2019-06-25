@@ -34,69 +34,6 @@ def es(list_data,name):
     return res_list
 
 
-def destination_area_es(list_data):
-    """
-    destination_area数据处理
-    :param list_data:
-    :return:
-    """
-    res_list = []
-    for data in list_data:
-        if len(res_list) == 0:
-            res_list.append(data)
-        else:
-            num = 0
-            for res_data in res_list:
-                num = num + 1
-                if res_data['destination_area'] == data['destination_area']:
-                    break
-                elif num == len(res_list):
-                    res_list.append(data)
-    return res_list
-
-
-def name_es(list_data):
-    """
-    name数据处理
-    :param list_data:
-    :return:
-    """
-    res_list = []
-    for data in list_data:
-        if len(res_list) == 0:
-            res_list.append(data)
-        else:
-            num = 0
-            for res_data in res_list:
-                num = num + 1
-                if res_data['name'] == data['name']:
-                    break
-                elif num == len(res_list):
-                    res_list.append(data)
-    return res_list
-
-
-def source_ip_es(list_data):
-    """
-    name数据处理
-    :param list_data:
-    :return:
-    """
-    res_list = []
-    for data in list_data:
-        if len(res_list) == 0:
-            res_list.append(data)
-        else:
-            num = 0
-            for res_data in res_list:
-                num = num + 1
-                if res_data['source_ip'] == data['source_ip']:
-                    break
-                elif num == len(res_list):
-                    res_list.append(data)
-    return res_list
-
-
 def test(request):
 
     res_data = json.loads(request.body)
