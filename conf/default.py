@@ -31,9 +31,9 @@ from django.conf.global_settings import *  # noqa
 # ==============================================================================
 # 在蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中获取 APP_ID 和 APP_TOKEN 的值
 APP_ID = 'network'
-APP_TOKEN = '9f6004db-b650-45d6-8355-be5d461d6a37'
+APP_TOKEN = '84faec40-3793-4fac-9fd0-ce908016a77d'
 # 蓝鲸智云开发者中心的域名，形如：http://paas.bking.com
-BK_PAAS_HOST = 'http://paas.bk.com:80'
+BK_PAAS_HOST = 'https://paas.zorkdata.com'
 
 # 请求官方 API 默认版本号，可选值为："v2" 或 ""；其中，"v2"表示规范化API，""表示未规范化API
 DEFAULT_BK_API_VER = 'v2'
@@ -56,7 +56,7 @@ ENVIRONMENT = os.environ.get('BK_ENV', 'development')
 APP_ID = os.environ.get('APP_ID', APP_ID)
 APP_TOKEN = os.environ.get('APP_TOKEN', APP_TOKEN)
 BK_PAAS_HOST = os.environ.get('BK_PAAS_HOST', BK_PAAS_HOST)
-
+BK_PAAS_INNER_HOST = os.environ.get('BK_PAAS_INNER_HOST', BK_PAAS_HOST)
 # 应用访问路径
 SITE_URL = '/'
 # 运行模式， DEVELOP(开发模式)， TEST(测试模式)， PRODUCT(正式模式)

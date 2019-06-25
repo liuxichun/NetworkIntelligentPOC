@@ -41,9 +41,11 @@ class Account(AccountSingleton):
     """
 
     # 平台验证用户登录态接口
-    BK_LOGIN_VERIFY_URL = "%s/login/accounts/is_login/" % settings.BK_PAAS_HOST
+    # BK_LOGIN_VERIFY_URL = "%s/login/accounts/is_login/" % settings.BK_PAAS_HOST
+    BK_LOGIN_VERIFY_URL =  "%s/login/accounts/is_login/" % getattr(settings, 'BK_PAAS_INNER_HOST',settings.BK_PAAS_HOST)
     # 平台获取用户信息接口
-    BK_GET_USER_INFO_URL = "%s/login/accounts/get_user/" % settings.BK_PAAS_HOST
+    # BK_GET_USER_INFO_URL = "%s/login/accounts/get_user/" % settings.BK_PAAS_HOST
+    BK_GET_USER_INFO_URL =  "%s/login/accounts/get_user/" % getattr(settings,'BK_PAAS_INNER_HOST',settings.BK_PAAS_HOST)
 
     def is_bk_token_valid(self, request):
         """验证用户登录态."""
